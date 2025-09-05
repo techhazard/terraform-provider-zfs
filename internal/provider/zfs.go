@@ -51,6 +51,45 @@ func parsePropertySource(input string) (PropertySource, error) {
 	}
 }
 
+var dynamicReadOnlyProperties = []string{
+  "userused@",
+  "userobjused@",
+  "groupused@",
+  "groupobjused@",
+  "projectused@",
+  "written@",
+}
+
+var readOnlyProperties = []string{
+  "available",
+  "compressratio",
+  "createtxg",
+  "creation",
+  "clones",
+  "defer_destroy",
+  "encryptionroot",
+  "filesystem_count",
+  "keystatus",
+  "guid",
+  "logicalreferenced",
+  "logicalused",
+  "mounted",
+  "objsetid",
+  "origin",
+  "redact_snaps",
+  "referenced",
+  "refcompressratio",
+  "snapshot_count",
+  "type",
+  "used",
+  "usedbychildren",
+  "usedbydataset",
+  "usedbysnapshots",
+  "userrefs",
+  "snapshots_changed",
+  "volblocksize",
+  "written",
+}
 var poolProperties = []string{
 	"allocated",
 	"altroot",
@@ -80,6 +119,20 @@ var poolProperties = []string{
 	"readonly",
 	"size",
 	"version",
+}
+
+func isReadOnlyProperty(property string) bool {
+	for _, readOnlyProperty := range readOnlyProperties {
+		if property == readOnlyProperty {
+			return true
+		}
+	}
+	for _, readOnlyProperty := range dynamicReadOnlyProperties {
+		if strings.HasPrefix(property, readOnlyProperty) {
+			return true
+		}
+	}
+	return false
 }
 
 func isPoolProperty(property string) bool {
